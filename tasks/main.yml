@@ -1,0 +1,427 @@
+# Получение настроек 
+  - name: Get settings
+    pw_settings_get_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+    register: settings_get_result
+
+  - name: Get settings debug
+    debug:
+      var: settings_get_result
+
+# Создание папки
+  - name: Create folder
+    pw_folder_create_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        vault: "{{test_vault_name}}"
+        name: "{{test_folder_name}}"
+    register: folder_create_result
+
+  - name: Create folder debug
+    debug:
+      var: folder_create_result
+
+# Создание подпапки
+  - name: Create subfolder
+    pw_folder_create_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        vault: "{{test_vault_name}}"
+        name: "{{test_subfolder_name}}"
+        parent: "{{test_folder_name}}"
+    register: subfolder_create_result
+
+  - name: Create subfolder debug
+    debug:
+      var: subfolder_create_result
+
+# Обновление папки
+  - name: Update folder
+    pw_folder_update_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        vault: "{{test_vault_name}}"
+        folder: "{{test_subfolder_name}}"
+        name: "{{test_subfolder_name}}_updated"
+    register: folder_update_result
+
+  - name: Update folder debug
+    debug:
+      var: folder_update_result
+  
+# Обновление папки по ее ID
+  - name: Update folder by ID
+    pw_folder_update_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        vault: "{{test_vault_name}}"
+        name: "{{test_subfolder_name}}_updated_by_id"
+        folder_id: "{{subfolder_create_result.response.id}}"
+    register: folder_update_result_by_id
+
+  - name: Update folder by ID debug
+    debug:
+      var: folder_update_result_by_id
+
+# Поиск папки
+  - name: Search folder
+    pw_folder_search_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        vault: "{{test_vault_name}}"
+        name: "{{test_subfolder_name}}_updated_by_id"
+    register: folder_search_result
+
+  - name: Search folder debug
+    debug:
+      var: folder_search_result
+
+# Получение папки
+  - name: Get folder
+    pw_folder_get_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        name: "{{test_subfolder_name}}_updated_by_id"
+        vault: "{{test_vault_name}}"
+    register: folder_get_result
+
+  - name: Get folder debug
+    debug:
+      var: folder_get_result
+
+# Получение папки по ее ID
+  - name: Get folder by ID
+    pw_folder_get_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        folder_id: "{{subfolder_create_result.response.id}}"
+    register: folder_get_result
+
+  - name: Get folder by ID debug
+    debug:
+      var: folder_get_result
+
+# Удаление папки по названию
+  - name: Delete folder
+    pw_folder_delete_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        name: "{{test_folder_name}}"
+        vault: "{{test_vault_name}}"
+    register: folder_delete_result
+
+  - name: Delete folder debug
+    debug:
+      var: folder_delete_result
+
+# Удаление папки по ее ID, сначала создаю папку, чтобы потом ее удалить
+  - name: Create folder
+    pw_folder_create_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        name: "{{test_folder_name}}"
+        vault: "{{test_vault_name}}"
+    register: folder_create_result
+
+  - name: Create folder debug
+    debug:
+      var: folder_create_result
+
+  - name: Delete folder by ID
+    pw_folder_delete_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        folder_id: "{{folder_create_result.response.id}}"
+    register: folder_delete_result
+
+  - name: Delete folder by ID debug
+    debug:
+      var: folder_delete_result
+
+# Создаю папку, использую ее далее при создании паролей
+  - name: Create folder
+    pw_folder_create_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        name: "{{test_folder_name}}"
+        vault: "{{test_vault_name}}"
+    register: folder_create_result
+
+  - name: Create folder debug
+    debug:
+      var: folder_create_result
+
+# Создание пароля в указаной папке
+  - name: Create password
+    pw_pass_create_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      pass_args:
+        vault: "{{test_vault_name}}"
+        name: "{{test_password_name}}"
+        url: https://example.ru
+        login: test_login
+        description: test_description
+        folder: "{{test_folder_name}}"
+        password: test_password
+        custom:
+          - name: "test_custom"
+            value: "something"
+            type: "text"
+        tags:
+        - test_tag1
+        - test_tag2
+    register: create_password_output
+
+  - name: Create password debug
+    debug:
+      var: create_password_output
+
+# Поиск пароля по пути
+  - name: Get password by path
+    pw_pass_get_by_path_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      path: "{{test_vault_name}}/{{test_folder_name}}/{{test_password_name}}"
+    register: password_get_by_path
+
+  - name: Password get by path debug
+    debug:
+      var: password_get_by_path
+
+  - set_fact:
+      lookup_path: "{{test_vault_name}}/{{test_folder_name}}/{{test_password_name}}"
+
+  - name: Получения пароля через lookup модуль
+    debug:
+      msg: "{{lookup('pw_get_pswd_v7', api_server=pw_server, access_token=pw_ac_token, refresh_token=pw_ref_token, master_key=pw_master_key, path=lookup_path)}}"
+
+# Поиск пароля
+  - name: Search password
+    pw_pass_search_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      search_args:
+        vault: "{{test_vault_name}}"
+        query: "{{test_password_name}}"
+    register: password_search
+
+  - name: Password search debug
+    debug:
+      var: password_search
+
+# Получение пароля по ID
+  - name: Get password by ID
+    pw_pass_get_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      password_id: "{{create_password_output.response}}"
+    register: password_get_by_id
+
+  - name: Password get by ID debug
+    debug:
+      var: password_get_by_id
+
+# Получить пароля через поиск, если будет найден более 1 или 0 совпадений, будет ошибка
+  - name: Get password by search
+    pw_pass_get_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      password_id: "{{create_password_output.response}}"
+      search_args:
+        vault: "{{test_vault_name}}"
+        query: "{{test_password_name}}"
+    register: password_get_by_search
+
+  - name: Password get by search debug
+    debug:
+      var: password_get_by_search
+
+# Обновление пароля по ID
+  - name: Update password by ID
+    pw_pass_update_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      password_id: "{{create_password_output.response}}"
+      pass_args:
+        vault: "{{test_vault_name}}"
+        name: "{{test_password_name}}_updated"
+        url: https://example_updated.ru
+        login: test_login_updated
+        description: test_description_updated
+        folder: "{{test_folder_name}}_updated"
+        password: test_password_updated
+        custom:
+          - name: "test_custom"
+            value: "something_updated"
+            type: "text"
+        tags:
+        - test_tag1_updated
+        - test_tag2_updated
+    register: password_update_by_search
+
+  - name: Update by ID debug
+    debug:
+      var: password_update_by_search
+
+# Обновление пароля через поиск, если будет найден более 1 или 0 совпадений, будет ошибка
+  - name: Update password by search
+    pw_pass_update_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      search_args:
+        query: "{{test_password_name}}_updated"
+        vault: "{{test_vault_name}}"
+      pass_args:
+        vault: "{{test_vault_name}}"
+        name: "{{test_password_name}}_updated_2"
+        url: https://example_updated_2.ru
+        login: test_login_updated_2
+        description: test_description_updated_2
+        folder: "{{test_folder_name}}_updated_2"
+        password: test_password_updated_2
+        custom:
+          - name: "test_custom"
+            value: "something_updated_2"
+            type: "text"
+        tags:
+        - test_tag1_updated_2
+        - test_tag2_updated_2
+    register: password_update_by_search
+
+  - name: Update password by search debug
+    debug:
+      var: password_update_by_search
+
+  # Получение редакций пароля
+  - name: Get snapshots
+    pw_pass_get_snapshots_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      password_id: "{{create_password_output.response}}"
+    register: snapshots_get_result
+
+  - name: Get all snapshots debug
+    debug:
+      var: snapshots_get_result
+
+  # Получение конкретной редакции пароля
+  - name: Get last snapshot
+    pw_pass_get_snapshots_by_id_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      password_id: "{{create_password_output.response}}"
+      snapshot_id: "{{snapshots_get_result.response['items'][0].id}}"
+    register: snapshots_get_result
+
+  - name: Get last snapshot debug
+    debug:
+      var: snapshots_get_result
+
+# Удаление пароля по ID
+  - name: Delete password by ID
+    pw_pass_delete_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      password_id: "{{create_password_output.response}}"
+
+# Создание пароля для еще одного примера удаления
+  - name: Create password
+    pw_pass_create_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      pass_args:
+        vault: "{{test_vault_name}}"
+        name: "{{test_password_name}}"
+        url: https://example.ru
+        login: test_login
+        description: test_description
+        folder: "{{test_folder_name}}"
+        password: test_password
+        custom:
+          - name: "test_custom"
+            value: "something"
+            type: "text"
+        tags:
+        - test_tag1
+        - test_tag2
+
+# Удаление пароля по поиску, если будет найден более 1 или 0 совпадений, будет ошибка
+  - name: Delete password
+    pw_pass_delete_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      search_args:
+        vault: "{{test_vault_name}}"
+        query: "{{test_password_name}}"
+
+# Просто очищаю после теста сейф
+  - name: Delete folder by ID
+    pw_folder_delete_v7:
+      api_server: "{{pw_server}}"
+      access_token: "{{pw_ac_token}}"
+      refresh_token: "{{pw_ref_token}}"
+      master_key: "{{pw_master_key}}"
+      folder_args:
+        folder_id: "{{folder_create_result.response.id}}"
+    register: folder_delete_by_id_result
