@@ -3,6 +3,7 @@ from typing import Any, Generator
 from ansible.errors import AnsibleError
 from passwork_client import PassworkClient
 
+# Change this var to False if you want to disable SSL verification
 VERIFY_SSL=True
 
 @contextmanager
