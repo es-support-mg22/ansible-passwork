@@ -1,4 +1,4 @@
-# Ansible Role: ansible-passwork-v
+# Ansible Role: ansible-passwork
 
 An Ansible Role with Python modules for working with PASSWORK API V7.
 
