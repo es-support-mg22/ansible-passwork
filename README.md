@@ -5,7 +5,7 @@ An Ansible Role with Python modules for working with PASSWORK API V7.
 ## Requirements
 
 Python:
-- passwork-python (https://github.com/passwork-me/passwork-python)
+- passwork-python module (https://github.com/passwork-me/passwork-python).
 
 ## Role Variables
 
