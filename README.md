@@ -1,6 +1,6 @@
 # Ansible Role: ansible-passwork
 
-An Ansible Role with Python modules for working with PASSWORK API V7.
+An Ansible Role with Python modules for working with PASSWORK API ( Current version: V7).
 
 ## Requirements
 
