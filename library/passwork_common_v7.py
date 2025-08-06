@@ -10,7 +10,7 @@ VERIFY_SSL=True
 def pw_login(api_server: str, access_token: str, refresh_token: str | None, master_key: str | None)-> Generator[PassworkClient, None, None]:
     try:
         passwork = PassworkClient(api_server,VERIFY_SSL)
-        passwork.set_tokens(access_token, refresh_token)
+        passwork.set_tokens(access_token, None)
         if bool(master_key):
             passwork.set_master_key(master_key)
     except Exception as e:
