@@ -1,16 +1,13 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
-from passwork_common_v7 import (
-  pw_login, 
-  get_vault, 
-  get_folder 
-  )
+from passwork_common_v7 import get_vault, pw_login, get_folder
+
 
 DOCUMENTATION = r'''
 ---
-module: pw_folder_search
+module: pw_pass_get
 
-short_description: Модуль для поиска папки в passwork
+short_description: Модуль для получения конкретной редакции пароля в Passwork
 
 options:
     api_server:
@@ -29,10 +26,14 @@ options:
         description: Ключ шифрования для шифрования на стороне клиента
         required: false
         type: str
-    folder_args:
-        description: Аргументы папки
+    password_id:
+        description: ID пароля, чьи редакции необходимо получить
         required: true
-        type: dict
+        type: str
+    snapshot_id:
+        description: ID редакции, которую необходимо получить
+        required: true
+        type: str
 
 author:
     - Ширяев Дмитрий (dshi@efsystem.ru)
@@ -45,40 +46,66 @@ response:
     returned: always
 '''
 
-def _password_folder_search(
+def _get_snapshot_by_id(
     api_server: str,
     access_token: str,
     refresh_token: str,
     master_key: str | None,
-    folder_args: dict[str, Any],
+    search_args: dict[str, Any],
 ):
-
     with pw_login(api_server,access_token,refresh_token,master_key) as pwClient:
 
-        vault= folder_args.pop('vault', None)
+        vault= search_args.pop('vault', None)
         vault_id = get_vault(pwClient, vault)['id']
 
-        folder_name= folder_args.pop('name', None)
-        response = get_folder(pwClient, folder_name, vault_id)
+        folder= search_args.pop('folder', None)
+        folder_id=get_folder(pwClient, folder, vault_id,None)['id']
+        
+        snap_name= search_args.pop('query', None)
 
+        vaults_ids=[]
+        folders_ids=[]
+
+        vaults_ids.append(vault_id)
+        folders_ids.append(folder_id)
+        
+        response = pwClient.search_and_decrypt_shortcut(query=snap_name, vault_ids=vaults_ids, folder_ids=folders_ids)
+        
         return response
 
 def main():
 
     module = AnsibleModule(
         argument_spec={
-            'api_server': {'required': True, 'no_log': True},
+            'api_server': {'required': True},
             'access_token': {'required': True, 'no_log': True},
             'refresh_token': {'required': False, 'no_log': True},
             'master_key': {'required': False, 'no_log': True},
-            'folder_args': {
+            'search_args': {
                 'required': True,
-                'type': 'raw',
+                'type': 'dict',
+                'options': {
+                    'query': {
+                        'required': True,
+                    },
+                    'tags': {
+                        'required': False,
+                        'type': 'list',
+                        'default': [],
+                    },
+                    'vault': {
+                        'required': False,
+                        'default': None,
+                    },
+                    'folder': {
+                        'required': True,
+                    },
+                },
+
             },
         },
         supports_check_mode=True,
     )
-
     result = {'changed': False, 'message': ''}
     if module.check_mode:
         module.exit_json(**result)
@@ -87,11 +114,10 @@ def main():
     access_token: str = module.params['access_token']
     refresh_token: str | None = module.params['refresh_token']
     master_key: str | None = module.params['master_key']
-    folder_args: dict[str, Any] = module.params['folder_args']
+    search_args: str = module.params['search_args']
 
-    result['response'] = _password_folder_search(api_server, access_token, refresh_token, master_key, folder_args)
+    result['response'] = _get_snapshot_by_id(api_server,access_token,refresh_token,master_key,search_args)
     module.exit_json(**result)
-
 
 
 if __name__ == '__main__':

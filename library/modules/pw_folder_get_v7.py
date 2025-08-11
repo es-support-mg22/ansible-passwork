@@ -63,10 +63,10 @@ def _password_folder_get(
 
                 vault= folder_args.pop('vault', None)
                 folder= folder_args.pop('name', None)
-                parent= folder_args.pop('parent', None)
 
                 vault_id = get_vault(pwClient, vault)['id']
-                response=get_folder(pwClient, folder, vault_id,parent)
+                folder_id=get_folder(pwClient, folder, vault_id)['id']
+                response=get_folder_by_id(pwClient, folder_id)
                 
             return response
 

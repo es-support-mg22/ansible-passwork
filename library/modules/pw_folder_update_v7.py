@@ -63,7 +63,7 @@ def _password_folder_update(
                 parent= folder_args.pop('parent', None)
                 
                 vault_id = get_vault(pwClient, vault)['id']
-                folder_id = get_folder(pwClient,folder,vault_id,parent)['id']
+                folder_id = get_folder(pwClient,folder,vault_id)['id']
 
             response= pwClient.call("POST", f"/api/v1/folders/{folder_id}", payload = folder_args)
 

@@ -62,10 +62,9 @@ def _password_folder_delete(
 
                 vault= folder_args.pop('vault', None)
                 folder_name= folder_args.pop('name', None)
-                parent= folder_args.pop('parent', None)
 
                 vault_id = get_vault(pwClient, vault)['id']
-                folder_id = get_folder(pwClient, folder_name, vault_id,parent)['id']
+                folder_id = get_folder(pwClient, folder_name, vault_id)['id']
                 
                 response=pwClient.call("DELETE", f"/api/v1/folders/{folder_id}")
 

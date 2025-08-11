@@ -58,27 +58,6 @@ def _get_password(
 
         response=pwClient.get_item(password_id)
         return response
-
-
-def _search_passwords(
-    api_server: str,
-    access_token: str,
-    refresh_token: str,
-    master_key: str | None,
-    search_args: dict[str, Any],
-):
-    with pw_login(api_server,access_token,refresh_token,master_key) as pwClient:
-        
-        vault_name = search_args.pop('vault')
-        search_args['vaultId'] = get_vault(pwClient, vault_name)['id']
-
-        passwords = pwClient.call("GET", f"/api/v1/items/search",payload=search_args)
-
-        if len(passwords) != 1:
-            raise AnsibleError(f'Найдено более одного или ни одного пароля: {passwords}')
-        
-        response = passwords[0]
-        return response
     
 def main():
 
@@ -139,21 +118,10 @@ def main():
     password_id: dict[str, Any] = module.params['password_id']
 
     if not password_id and not search_args:
-        raise AnsibleError('Нужно указать либо "password_id", либо "search_args".')
+        raise AnsibleError('Нужно указать "password_id".')
 
     if password_id:
-
         result['response'] = _get_password(api_server, access_token,refresh_token, master_key, password_id)
-
-    else:
-
-        result['response'] = _search_passwords(
-            api_server,
-            access_token,
-            refresh_token,
-            master_key,
-            search_args,
-        )
 
     module.exit_json(**result)
 

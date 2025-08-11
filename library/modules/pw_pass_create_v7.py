@@ -58,9 +58,8 @@ def _password_password_create(
             vault= pass_args.pop('vault', None)
             vault_id = get_vault(pwClient, vault)['id']
 
-            parent_folder: str | None = pass_args.get('parent_folder')
             folder= pass_args.pop('folder', None)
-            folder_id = get_folder(pwClient,folder,vault_id,parent_folder)['id']
+            folder_id = get_folder(pwClient,folder,vault_id)['id']
 
             custom_fields = pass_args.pop('custom', None)
             tags = pass_args.pop('tags', None)
