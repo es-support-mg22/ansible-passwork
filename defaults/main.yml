@@ -1,9 +1,0 @@
-# Past your Passwork credentials here
-pw_server: ""
-pw_ac_token: ""
-pw_ref_token: ""
-pw_master_key: ""
-test_vault_name: TEST
-test_folder_name: TestFolder
-test_subfolder_name: TestSubfolder
-test_password_name: TestPassword
