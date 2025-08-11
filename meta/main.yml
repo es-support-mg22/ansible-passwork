@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   namespace: ansible-passwork
-  role_name: ansible-passwork-v7
+  role_name: ansible-passwork
   author: "support@efsystem.ru"
   description: "Ansible role with python modulles for Passwork V7."
   company: "EFIS"
