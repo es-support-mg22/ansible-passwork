@@ -6,13 +6,9 @@ readme: README.md
 authors:
   - EFIS
 description: Ansible python modules for Passwork API
-license:
-  - ""
-license_file: ""
+license: "MIT"
 tags:
   - passwork
-dependencies: ""
 repository: https://github.com/es-support-mg22/passwork_api
 documentation: ""
 homepage: https://github.com/es-support-mg22/passwork_api
-issues: ""
