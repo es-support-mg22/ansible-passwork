@@ -1,11 +1,10 @@
 ---
-namespace: passwork
+namespace: es-support-mg22
 name: passwork_api
-version: 1.0.0                          # Collection semantic version
-authors:                                # List of authors
+version: 1.0.0
+authors:
   - EFIS
-description: Modules for passwork python-connector
-tags:                                   # Tags to help find collection.
-  - passwork                     
-readme: README.md                       # Path to the main README file
-repository: https://github.com/es-support-mg22/ansible-collection-passwork
+description: Python modules for passwork api
+tags:
+  - passwork
+readme: README.md
