@@ -1,11 +1,18 @@
 ---
 namespace: es_support_mg22
 name: passwork_api
-version: 1.0.0
+version: 1.0.18
+readme: README.md
 authors:
   - EFIS
-description: Python modules for passwork api
+description: Ansible python modules for Passwork API
+license:
+  - ""
+license_file: ""
 tags:
   - passwork
-readme: README.md
-repository: https://github.com/es-support-mg22
+dependencies: ""
+repository: https://github.com/es-support-mg22/passwork_api
+documentation: ""
+homepage: https://github.com/es-support-mg22/passwork_api
+issues: ""
