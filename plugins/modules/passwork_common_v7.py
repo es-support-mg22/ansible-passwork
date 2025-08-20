@@ -45,6 +45,30 @@ def search_folder (pwClient: PassworkClient, folder_name: str, vault_id: str | N
         raise AnsibleError(f'Ошибка поиска папки: {e}')
     return folders
 
+def get_folder_by_path(pwClient: PassworkClient, folder_name: str, path: str, vault_id: str | None) -> dict | None:
+
+
+    body = {'query': folder_name}
+
+    folders= pwClient.call("GET", f"/api/v1/folders/search",payload=body)['items']
+
+    for folder in folders:
+        if 'path' in folder:
+            folder['pathStr']= path_to_string(folder['path'])
+
+    matched_folders = [
+                folder
+                for folder in folders
+                if folder['vaultId'] == vault_id and folder['name'] == folder_name and folder['pathStr'] in path
+            ]
+    
+    if len(matched_folders) > 1:
+        raise AnsibleError((
+            f'Не удалось найти единственную папку по пути {path}. '
+        ))
+
+    return matched_folders[0]
+
 def get_folder(pwClient: PassworkClient, folder_name: str, vault_id: str | None):
     
     folders= search_folder(pwClient,folder_name,vault_id)
