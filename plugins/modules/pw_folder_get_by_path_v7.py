@@ -61,7 +61,7 @@ def _password_folder_get_by_path(
 
             path= folder_args.pop('path', None)
 
-            response=get_folder_by_path(folder_name,path,vault_id)
+            response=get_folder_by_path(pwClient,folder_name,path,vault_id)
             return response
 
 def main():
