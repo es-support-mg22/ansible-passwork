@@ -52,6 +52,9 @@ def get_folder_by_path(pwClient: PassworkClient, folder_name: str, path: str, va
 
     folders= pwClient.call("GET", f"/api/v1/folders/search",payload=body)['items']
 
+    if len(folders) == 0:
+        return None
+
     for folder in folders:
         if 'path' in folder:
             folder['pathStr']= path_to_string(folder['path'])
@@ -62,6 +65,9 @@ def get_folder_by_path(pwClient: PassworkClient, folder_name: str, path: str, va
                 if folder['vaultId'] == vault_id and folder['name'] == folder_name and folder['pathStr'] in path
             ]
     
+    if len(matched_folders) == 0:
+        return None
+
     if len(matched_folders) > 1:
         raise AnsibleError((
             f'Не удалось найти единственную папку по пути {path}. '
