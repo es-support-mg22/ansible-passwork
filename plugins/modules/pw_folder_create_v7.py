@@ -57,10 +57,14 @@ def _password_folder_create(
             vault = folder_args.pop('vault', None)
             vault_id = get_vault(pwClient,  vault)['id']
             folder_args['vaultId'] = vault_id
-
-            parent_folder: str | None = folder_args.pop('parent', None)
-            if parent_folder is not None:
-                folder_args['parentFolderId'] = get_folder(pwClient,parent_folder,vault_id)['id']
+            
+            parent_id = folder_args.pop('parent_id', None)
+            if parent_id is not None:
+                folder_args['parentFolderId']=parent_id
+            else:
+                parent_folder: str | None = folder_args.pop('parent', None)
+                if parent_folder is not None:
+                    folder_args['parentFolderId'] = get_folder(pwClient,parent_folder,vault_id)['id']
                 
             response=pwClient.call("POST", f"/api/v1/folders", payload = folder_args)
             return response
