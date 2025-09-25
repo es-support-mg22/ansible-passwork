@@ -1,13 +1,13 @@
 from typing import Any
+from ansible.errors import AnsibleError
 from ansible.module_utils.basic import AnsibleModule
 from module_utils.passwork_common_v7 import pw_login
-
 
 DOCUMENTATION = r'''
 ---
 module: pw_pass_get
 
-short_description: Модуль для получения конкретной редакции пароля в Passwork
+short_description: Модуль удаления пароля в passwork
 
 options:
     api_server:
@@ -27,13 +27,13 @@ options:
         required: false
         type: str
     password_id:
-        description: ID пароля, чьи редакции необходимо получить
-        required: true
+        description: ID пароля
+        required: false
         type: str
-    snapshot_id:
-        description: ID редакции, которую необходимо получить
+    search_args:
+        description: Аргументы поиска
         required: true
-        type: str
+        type: dict
 
 author:
     - Ширяев Дмитрий (dshi@efsystem.ru)
@@ -46,18 +46,15 @@ response:
     returned: always
 '''
 
-def _get_snapshot_by_id(
-    api_server: str,
-    access_token: str,
-    refresh_token: str,
-    master_key: str | None,
-    password_id: str,
-    snapshot_id: str,
+def _move_password(api_server:str,access_token:str,refresh_token:str,master_key:str, password_id: str, folder_args: dict[str, Any]
 ):
     with pw_login(api_server,access_token,refresh_token,master_key) as pwClient:
 
-        response = pwClient.call("GET", f"/api/v1/items/{password_id}/snapshot/{snapshot_id}")
-        
+        vault = folder_args.pop('vault', None)
+        vault_id = get_vault(pwClient,  vault)['id']
+        folder_args['vaultId'] = vault_id
+
+        response = pwClient.call("POST", f"/api/v1/items/{password_id}/move", payload = folder_args)
         return response
 
 def main():
@@ -68,11 +65,15 @@ def main():
             'access_token': {'required': True, 'no_log': True},
             'refresh_token': {'required': False, 'no_log': True},
             'master_key': {'required': False, 'no_log': True},
-            'password_id': {'required': True, 'no_log': True},
-            'snapshot_id': {'required': True, 'no_log': True},
+            'password_id': {'required': False, 'no_log': True},
+            'folder_args': {
+                'required': True,
+                'type': 'raw',
+            },
         },
         supports_check_mode=True,
     )
+
     result = {'changed': False, 'message': ''}
     if module.check_mode:
         module.exit_json(**result)
@@ -81,10 +82,16 @@ def main():
     access_token: str = module.params['access_token']
     refresh_token: str | None = module.params['refresh_token']
     master_key: str | None = module.params['master_key']
-    password_id: str = module.params['password_id']
-    snapshot_id: str = module.params['snapshot_id']
+    password_id: dict | None = module.params['password_id']
+    folder_args: dict[str, Any] = module.params['folder_args']
 
-    result['response'] = _get_snapshot_by_id(api_server,access_token,refresh_token,master_key,password_id,snapshot_id)
+    if not password_id:
+        raise AnsibleError('Нужно указать "password_id".')
+
+    if password_id:
+
+        result['response'] =_move_password(api_server, access_token,refresh_token, master_key,password_id , folder_args)
+        
     module.exit_json(**result)
 
 

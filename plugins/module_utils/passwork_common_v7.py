@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from typing import Any, Generator
 from ansible.errors import AnsibleError
-from passwork_client import PassworkClient
+from module_utils.passwork_client import PassworkClient
 
 VERIFY_SSL=False
 
