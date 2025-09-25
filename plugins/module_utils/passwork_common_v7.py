@@ -1,9 +1,9 @@
 from contextlib import contextmanager
 from typing import Any, Generator
 from ansible.errors import AnsibleError
-from module_utils.passwork_client import PassworkClient
+from passwork_client import PassworkClient
 
-VERIFY_SSL=False
+VERIFY_SSL=True
 
 @contextmanager
 def pw_login(api_server: str, access_token: str, refresh_token: str | None, master_key: str | None)-> Generator[PassworkClient, None, None]:

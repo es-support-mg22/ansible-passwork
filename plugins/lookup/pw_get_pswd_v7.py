@@ -29,7 +29,7 @@ DOCUMENTATION = r"""
 """
 from ansible.plugins.lookup import LookupBase
 from ansible.utils.display import Display
-from module_utils.passwork_common_v7 import get_password_by_path,pw_login
+from passwork_common_v7 import get_password_by_path,pw_login
 
 display = Display()
 
