@@ -5,7 +5,7 @@ from passwork_common_v7 import pw_login
 
 DOCUMENTATION = r'''
 ---
-module: pw_pass_get
+module: pw_settings_get_v7
 
 short_description: Модуль для получения информации о настройках Passwork
 
@@ -60,7 +60,7 @@ def main():
             'refresh_token': {'required': False, 'no_log': True},
             'master_key': {'required': False, 'no_log': True},
         },
-        supports_check_mode=True,
+        supports_check_mode=True
     )
 
     result = {'changed': False, 'message': ''}
@@ -70,9 +70,9 @@ def main():
     api_server: str = module.params['api_server']
     access_token: str = module.params['access_token']
     refresh_token: str | None = module.params['refresh_token']
-    master_key: str | None = module.params.get('master_key')
+    master_key: str | None = module.params['master_key']
 
-    result['response'] = _get_settings(api_server, access_token,refresh_token,master_key)
+    result['response'] = _get_settings(api_server, access_token, refresh_token, master_key)
     module.exit_json(**result)
 
 
