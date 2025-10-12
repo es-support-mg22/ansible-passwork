@@ -1,13 +1,13 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
-from passwork_common_v7 import pw_login
+from module_utils.passwork_common_v7 import pw_login
 
 
 DOCUMENTATION = r'''
 ---
-module: pw_pass_get
+module: pw_refresh_tokens
 
-short_description: Модуль для получения информации о настройках Passwork
+short_description: Модуль для обновления токена
 
 options:
     api_server:

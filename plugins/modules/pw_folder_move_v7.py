@@ -1,6 +1,6 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
-from passwork_common_v7 import (
+from module_utils.passwork_common_v7 import (
   pw_login, 
   get_vault, 
   get_folder
@@ -8,9 +8,9 @@ from passwork_common_v7 import (
 from ansible.errors import AnsibleError
 DOCUMENTATION = r'''
 ---
-module: pw_folder_create
+module: pw_folder_move
 
-short_description: Модуль для создания папки в passwork
+short_description: Модуль для переноса папки в passwork
 
 options:
     api_server:

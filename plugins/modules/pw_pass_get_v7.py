@@ -1,12 +1,12 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
 from ansible.errors import AnsibleError
-from passwork_common_v7 import pw_login, get_vault
+from module_utils.passwork_common_v7 import pw_login, get_vault
 
 
 DOCUMENTATION = r'''
 ---
-module: pw_pass_search
+module: pw_pass_get
 
 short_description: Модуль для получения пароля в passwork
 

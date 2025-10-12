@@ -1,11 +1,11 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
-from passwork_common_v7 import pw_login
+from module_utils.passwork_common_v7 import pw_login
 
 
 DOCUMENTATION = r'''
 ---
-module: pw_settings_get_v7
+module: pw_settings_get
 
 short_description: Модуль для получения информации о настройках Passwork
 

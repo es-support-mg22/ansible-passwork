@@ -1,11 +1,11 @@
 from typing import Any
 from ansible.errors import AnsibleError
 from ansible.module_utils.basic import AnsibleModule
-from passwork_common_v7 import pw_login
+from module_utils.passwork_common_v7 import pw_login
 
 DOCUMENTATION = r'''
 ---
-module: pw_pass_get
+module: pw_pass_delete
 
 short_description: Модуль удаления пароля в passwork
 

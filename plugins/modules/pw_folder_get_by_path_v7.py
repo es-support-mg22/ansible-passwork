@@ -1,15 +1,15 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
-from passwork_common_v7 import (
+from module_utils.passwork_common_v7 import (
   pw_login, 
   get_vault, 
   get_folder_by_path)
 
 DOCUMENTATION = r'''
 ---
-module: pw_folder_get
+module: pw_folder_get_by_path
 
-short_description: Модуль для получения папки в passwork
+short_description: Модуль для получения папки по пути в passwork
 
 options:
     api_server:

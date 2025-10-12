@@ -1,6 +1,6 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
-from passwork_common_v7 import (
+from module_utils.passwork_common_v7 import (
   pw_login, 
   get_vault, 
   get_folder
@@ -61,7 +61,7 @@ def _password_folder_create(
             parent_id = folder_args.pop('parent_id', None)
             if parent_id is not None:
                 folder_args['parentFolderId']=parent_id
-            else:
+            if parent_id is None:
                 parent_folder: str | None = folder_args.pop('parent', None)
                 if parent_folder is not None:
                     folder_args['parentFolderId'] = get_folder(pwClient,parent_folder,vault_id)['id']
