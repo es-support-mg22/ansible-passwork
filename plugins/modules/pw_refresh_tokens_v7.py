@@ -45,7 +45,8 @@ def _refresh_token(
     master_key: str | None
 ):
 
-    with pw_login(api_server,access_token,refresh_token,master_key) as pwClient:
+        pwClient = PassworkClient(api_server,False)
+        pwClient.set_tokens(access_token,refresh_token)
         response = pwClient.update_tokens()
         return response
 
