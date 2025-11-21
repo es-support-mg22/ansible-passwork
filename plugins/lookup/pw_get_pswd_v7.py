@@ -1,6 +1,6 @@
 DOCUMENTATION = r'''
 ---
-module: pw_get_pswd
+module: pw_get_pswd_v7
 
 short_description: Лукап для получения пароля по пути
 
