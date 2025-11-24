@@ -1,7 +1,7 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
 from ansible.errors import AnsibleError
-from module_utils.passwork_common_v7 import pw_login, get_vault
+from passwork_common_v7 import pw_login, get_vault
 
 
 DOCUMENTATION = r'''
