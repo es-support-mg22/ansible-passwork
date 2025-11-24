@@ -1,13 +1,13 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
-from passwork_common_v7 import pw_login
+from es_support_mg22.passwork_api.module_utils.passwork_common_v7 import pw_login
 
 
 DOCUMENTATION = r'''
 ---
-module: pw_settings_get
+module: pw_test
 
-short_description: Модуль для получения информации о настройках Passwork
+short_description: Тестовый модуль
 
 options:
     api_server:

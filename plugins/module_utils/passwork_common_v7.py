@@ -3,8 +3,10 @@ from typing import Any, Generator
 from ansible.errors import AnsibleError
 from passwork_client import PassworkClient
 
+# Проверка SSL при установке соединения
 VERIFY_SSL=True
 
+# Установка соединения с Пассворком
 @contextmanager
 def pw_login(api_server: str, access_token: str, refresh_token: str | None, master_key: str | None)-> Generator[PassworkClient, None, None]:
     try:
@@ -16,7 +18,7 @@ def pw_login(api_server: str, access_token: str, refresh_token: str | None, mast
         raise AnsibleError(f'Ошибка соединения с Passwork: {e}')
     yield passwork
 
-
+# Получить сейф
 def get_vault(pwClient: PassworkClient, vault_name: str):
     try:
         vaults_resp = pwClient.call("GET", f"/api/v1/vaults")
@@ -28,6 +30,7 @@ def get_vault(pwClient: PassworkClient, vault_name: str):
         raise AnsibleError(f'Ошибка соединения получения сейфа: {e}')
     return vault
 
+# Поиск папки
 def search_folder (pwClient: PassworkClient, folder_name: str, vault_id: str | None):
     try:
         
@@ -45,6 +48,7 @@ def search_folder (pwClient: PassworkClient, folder_name: str, vault_id: str | N
         raise AnsibleError(f'Ошибка поиска папки: {e}')
     return folders
 
+# Получить папку по пути
 def get_folder_by_path(pwClient: PassworkClient, folder_name: str, path: str, vault_id: str | None) -> dict | None:
 
 
@@ -75,6 +79,7 @@ def get_folder_by_path(pwClient: PassworkClient, folder_name: str, path: str, va
 
     return matched_folders[0]
 
+# Получить папку
 def get_folder(pwClient: PassworkClient, folder_name: str, vault_id: str | None):
     
     folders= search_folder(pwClient,folder_name,vault_id)
@@ -88,10 +93,12 @@ def get_folder(pwClient: PassworkClient, folder_name: str, vault_id: str | None)
         return (matched_folders[0])
     return None
 
+# Получить папку по айди
 def get_folder_by_id(pwClient: PassworkClient, folder_id: str):
     response = pwClient.call("GET", f"/api/v1/folders/{folder_id}")
     return response
 
+# Получить пароли
 def _get_passwords(pwClient: PassworkClient, password_name: str):
     try:
         passwords_response = pwClient.call("GET",f'/api/v1/items/search', payload={'query': password_name})
@@ -112,7 +119,7 @@ def _get_passwords(pwClient: PassworkClient, password_name: str):
     except Exception as e:
         raise AnsibleError(f'Ошибка получения пароля: {e}')
 
-
+# Получить пароль по пути
 def get_password_by_path(pwClient: PassworkClient, path: str) -> dict | None:
 
     vault_folders, pass_name = path.rsplit('/', maxsplit=1)
@@ -138,6 +145,7 @@ def get_password_by_path(pwClient: PassworkClient, path: str) -> dict | None:
         return None
     return matched_by_path_passwords[0]
 
+# Преобразование массива папок в путь
 def path_to_string(path: dict):
     pathStr=""
     for p in path:
