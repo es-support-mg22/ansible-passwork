@@ -1,7 +1,7 @@
 from typing import Any
 from ansible.module_utils.basic import AnsibleModule
 from passwork_common_v7 import pw_login
-
+from passwork_client import PassworkClient
 
 DOCUMENTATION = r'''
 ---
